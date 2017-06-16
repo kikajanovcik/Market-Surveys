@@ -1,7 +1,6 @@
 package io.kikajanovcik.maketsurveys.services;
 
 import io.kikajanovcik.maketsurveys.classes.Request;
-import io.kikajanovcik.maketsurveys.classes.Subscription;
 import io.kikajanovcik.maketsurveys.classes.Subscription.FREQUENCY;
 import io.kikajanovcik.maketsurveys.repositories.SurveyRepository;
 import org.apache.log4j.LogManager;
@@ -11,7 +10,6 @@ import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
 import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Service;
 
-import javax.naming.event.ObjectChangeListener;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -24,7 +22,7 @@ public class SurveyService {
     private final ThreadPoolTaskScheduler taskExecutor;
 
     private static final Logger log = LogManager.getLogger("[Logger]");
-    private static final Logger schedulingLogger = LogManager.getLogger(log.getName() + ".[scheduling]");
+    private static final Logger schedulingLogger = LogManager.getLogger(log.getName() + ".[Scheduling]");
 
     public static final CronTrigger DAILY = new CronTrigger("0 0 12 1/1 * ?");
     public static final CronTrigger WEEKLY = new CronTrigger("0 0 12 ? * MON");
@@ -39,10 +37,12 @@ public class SurveyService {
 
     public void subscribe(Request request) {
 
-        schedulingLogger.info("Request received for " + request.getRequester().getName());
+        schedulingLogger.info("Request received from " + request.getRequester().getName());
 
+        schedulingLogger.info("Searching for surveys of " + request.getQueries());
         request.setResponse(getSurveys(request.getQueries()));
-        schedulingLogger.info("Searching for surveys of " + request.getQueries().values());
+
+        schedulingLogger.info("Channels to receive subscription " + request.getSubscription().getChannels());
 
         //taskExecutor.scheduleWithFixedDelay(request, 30000);
         CronTrigger frequency = getFrequency(request.getSubscription().getFrequency());
@@ -53,17 +53,17 @@ public class SurveyService {
     private List<Object> getSurveys(Map<String, Object> queries) {
 
         String subject = (String) queries.get("subject");
-//        String country = (String) queries.get("country");
-//        int minAge = queries.get("age") == null ? null : Integer.valueOf((String) queries.get("age"));
-//        int maxAge = queries.get("age") == null ? null : Integer.valueOf((String) queries.get("age"));
+        String country = (String) queries.get("country");
+        int minAge = (int) queries.get("minAge");
+        int maxAge = (int) queries.get("maxAge");
 
         return surveys.findAll().stream()
                 .filter(s ->
-                        (isNotSelected(subject) || s.getSubject().equalsIgnoreCase(subject)) //&&
-//                        (isNotSelected(country) || s.getCountry().equalsIgnoreCase(country)) &&
-//                        (isNotSelected(minAge) || s.getTargetAge()[0] >= minAge) &&
-//                        (isNotSelected(maxAge) || s.getTargetAge()[1] <= maxAge))
-                ).collect(Collectors.toList());
+                        (isNotSelected(subject) || s.getSubject().equalsIgnoreCase(subject)) &&
+                        (isNotSelected(country) || s.getCountry().equalsIgnoreCase(country)) &&
+                        (isNotSelected(minAge) || s.getTargetAge()[0] >= minAge) &&
+                        (isNotSelected(maxAge) || s.getTargetAge()[1] <= maxAge))
+                .collect(Collectors.toList());
     }
 
     private void sendSurveys(List<Object> surveys) {
