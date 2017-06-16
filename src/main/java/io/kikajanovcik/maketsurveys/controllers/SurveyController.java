@@ -1,12 +1,13 @@
 package io.kikajanovcik.maketsurveys.controllers;
 
 import io.kikajanovcik.maketsurveys.services.SurveyService;
-import io.kikajanovcik.maketsurveys.entities.Request;
+import io.kikajanovcik.maketsurveys.classes.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 
@@ -14,17 +15,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/surveys")
 public class SurveyController {
 
-    @Autowired private SurveyService surveyService;
+    @Autowired SurveyService surveyService;
 
-    @RequestMapping(value = "/subscribe")
+    private static final String BAD_REQUEST_MESSAGE = "Sorry, we cannot process your request due to invalid data";
+    private static final String SUCCESS_MESSAGE = "You have been successfully subscribed";
+
+    @RequestMapping(value = "/subscribe", method = RequestMethod.POST)
     public ResponseEntity<Object> subscribe(@RequestBody Request request) {
 
-        surveyService.subscribe(request);
-
-        if (request.getResponse().isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        if (request.isInvalid()) {
+            return new ResponseEntity<>(BAD_REQUEST_MESSAGE, HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        surveyService.subscribe(request);
+        return new ResponseEntity<>(SUCCESS_MESSAGE, HttpStatus.OK);
     }
 }

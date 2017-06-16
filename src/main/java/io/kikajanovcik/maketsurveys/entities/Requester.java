@@ -13,9 +13,6 @@ public class Requester {
     Long id;
 
     private String name;
-    public enum FREQUENCY { DAILY, WEEKLY, MONTHLY };
-    private FREQUENCY subscriptionFrequency;
-    private String[] subscriptionChannels;
 
     public Requester(String name) {
         this.name = name;
@@ -31,19 +28,4 @@ public class Requester {
         return name;
     }
 
-    public FREQUENCY getSubscriptionFrequency() {
-        return subscriptionFrequency;
-    }
-
-    public void setSubscriptionFrequency(FREQUENCY subscriptionFrequency) {
-        this.subscriptionFrequency = subscriptionFrequency;
-    }
-
-    public String[] getSubscriptionChannels() {
-        return subscriptionChannels;
-    }
-
-    public void setSubscriptionChannels(String[] subscriptionChannels) {
-        this.subscriptionChannels = subscriptionChannels;
-    }
 }

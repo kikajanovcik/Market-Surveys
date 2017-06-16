@@ -1,9 +1,7 @@
 package io.kikajanovcik.maketsurveys.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class Provider {
@@ -11,6 +9,9 @@ public class Provider {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
+
+    @OneToMany(mappedBy="provider", fetch=FetchType.EAGER)
+    private List<Survey> surveys;
 
     private String name;
 
