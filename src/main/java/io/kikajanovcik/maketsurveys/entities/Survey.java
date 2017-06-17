@@ -15,12 +15,13 @@ public class Survey {
 
     private String subject;
     private String country;
-    private int[] targetAge = new int[2];
+    private Integer[] targetAge = new Integer[2];
 
-    public Survey(Provider provider, String subject, String country) {
+    public Survey(Provider provider, String subject, String country, Integer[] targetAge) {
         this.provider = provider;
         this.subject = subject;
         this.country = country;
+        this.targetAge = targetAge;
     }
 
     public Survey() {}
@@ -41,7 +42,7 @@ public class Survey {
         return country;
     }
 
-    public int[] getTargetAge() {
+    public Integer[] getTargetAge() {
         return targetAge;
     }
 }

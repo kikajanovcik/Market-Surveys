@@ -1,7 +1,7 @@
 package io.kikajanovcik.maketsurveys.controllers;
 
+import io.kikajanovcik.maketsurveys.classes.SurveyRequest;
 import io.kikajanovcik.maketsurveys.services.SurveyService;
-import io.kikajanovcik.maketsurveys.classes.Request;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,13 +21,13 @@ public class SurveyController {
     private static final String SUCCESS_MESSAGE = "You have been successfully subscribed";
 
     @RequestMapping(value = "/subscribe", method = RequestMethod.POST)
-    public ResponseEntity<Object> subscribe(@RequestBody Request request) {
+    public ResponseEntity<Object> subscribe(@RequestBody SurveyRequest surveyRequest) {
 
-        if (request.isInvalid()) {
+        if (surveyRequest.isInvalid()) {
             return new ResponseEntity<>(BAD_REQUEST_MESSAGE, HttpStatus.BAD_REQUEST);
         }
 
-        surveyService.subscribe(request);
+        surveyService.subscribe(surveyRequest);
         return new ResponseEntity<>(SUCCESS_MESSAGE, HttpStatus.OK);
     }
 }

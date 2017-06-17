@@ -1,25 +1,25 @@
 package io.kikajanovcik.maketsurveys.classes;
 
-import java.util.Map;
+import java.util.List;
 
 public class Subscription {
 
-    public enum FREQUENCY { DAILY, WEEKLY, MONTHLY };
-    private FREQUENCY frequency;
-    private Map<String, String> channels;
+    public enum Frequency { DAILY, WEEKLY, MONTHLY };
+    private Frequency frequency;
+    private List<String> channels;
 
-    public Subscription(FREQUENCY frequency, Map<String, String> channels) {
+    public Subscription(Frequency frequency, List<String> channels) {
         this.frequency = frequency;
         this.channels = channels;
     }
 
     public Subscription() {}
 
-    public FREQUENCY getFrequency() {
+    public Frequency getFrequency() {
         return frequency;
     }
 
-    public Map<String, String> getChannels() {
+    public List<String> getChannels() {
         return channels;
     }
 }

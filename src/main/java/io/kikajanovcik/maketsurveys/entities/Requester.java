@@ -1,9 +1,8 @@
 package io.kikajanovcik.maketsurveys.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.HashMap;
+import java.util.Map;
 
 @Entity
 public class Requester {
@@ -12,10 +11,17 @@ public class Requester {
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
 
+    @ElementCollection
+    private Map<String, String> channels;
     private String name;
 
-    public Requester(String name) {
+    public Requester(String name, Map<String, String> channels) {
         this.name = name;
+        this.channels = channels;
+    }
+
+    public Requester(Long id) {
+        this.id = id;
     }
 
     public Requester() {}
@@ -28,4 +34,7 @@ public class Requester {
         return name;
     }
 
+    public Map<String, String> getChannels() {
+        return channels;
+    }
 }

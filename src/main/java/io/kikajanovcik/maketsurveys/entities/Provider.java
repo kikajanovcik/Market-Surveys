@@ -20,4 +20,16 @@ public class Provider {
     }
 
     public Provider() {}
+
+    public Long getId() {
+        return id;
+    }
+
+    public List<Survey> getSurveys() {
+        return surveys;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

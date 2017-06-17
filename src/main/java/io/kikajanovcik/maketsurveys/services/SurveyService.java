@@ -1,7 +1,11 @@
 package io.kikajanovcik.maketsurveys.services;
 
-import io.kikajanovcik.maketsurveys.classes.Request;
-import io.kikajanovcik.maketsurveys.classes.Subscription.FREQUENCY;
+import io.kikajanovcik.maketsurveys.classes.SurveyRequest;
+import io.kikajanovcik.maketsurveys.classes.Subscription.Frequency;
+import io.kikajanovcik.maketsurveys.classes.SurveySubscription;
+import io.kikajanovcik.maketsurveys.entities.Requester;
+import io.kikajanovcik.maketsurveys.entities.Survey;
+import io.kikajanovcik.maketsurveys.repositories.RequesterRepository;
 import io.kikajanovcik.maketsurveys.repositories.SurveyRepository;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
@@ -18,11 +22,11 @@ import java.util.stream.Collectors;
 public class SurveyService {
 
     @Autowired SurveyRepository surveys;
+    @Autowired RequesterRepository requesters;
 
     private final ThreadPoolTaskScheduler taskExecutor;
 
-    private static final Logger log = LogManager.getLogger("[Logger]");
-    private static final Logger schedulingLogger = LogManager.getLogger(log.getName() + ".[Scheduling]");
+    private static final Logger logger = LogManager.getLogger(SurveyService.class);
 
     public static final CronTrigger DAILY = new CronTrigger("0 0 12 1/1 * ?");
     public static final CronTrigger WEEKLY = new CronTrigger("0 0 12 ? * MON");
@@ -31,31 +35,31 @@ public class SurveyService {
     public SurveyService() {
         taskExecutor = new ThreadPoolTaskScheduler();
         taskExecutor.setWaitForTasksToCompleteOnShutdown(true);
-        taskExecutor.setErrorHandler(t -> schedulingLogger.error("Unknown error occurred while executing task.", t));
+        taskExecutor.setErrorHandler(t -> logger.error("Unknown error occurred while executing task", t));
         taskExecutor.initialize();
     }
 
-    public void subscribe(Request request) {
+    public void subscribe(SurveyRequest surveyRequest) {
 
-        schedulingLogger.info("Request received from " + request.getRequester().getName());
+        Requester requester = requesters.findOne(surveyRequest.getRequester().getId());
+        surveyRequest.setRequester(requester);
+        logger.info("SurveyRequest received from " + requester.getName());
+        logger.info("Channels to receive subscription " + requester.getChannels());
 
-        schedulingLogger.info("Searching for surveys of " + request.getQueries());
-        request.setResponse(getSurveys(request.getQueries()));
+        surveyRequest.setSurveyService(this);
+        SurveySubscription surveySubscription = new SurveySubscription(surveyRequest);
+        Frequency frequency = surveyRequest.getSubscription().getFrequency();
+        taskExecutor.schedule(surveySubscription, getFrequencyTrigger(frequency));
 
-        schedulingLogger.info("Channels to receive subscription " + request.getSubscription().getChannels());
-
-        //taskExecutor.scheduleWithFixedDelay(request, 30000);
-        CronTrigger frequency = getFrequency(request.getSubscription().getFrequency());
-        taskExecutor.schedule(request, frequency);
-        schedulingLogger.info("Scheduling successful to be done " + request.getSubscription().getFrequency());
+        logger.info("Scheduling successful to be done " + frequency);
     }
 
-    private List<Object> getSurveys(Map<String, Object> queries) {
+    public List<Survey> getSurveys(Map<String, Object> queries) {
 
         String subject = (String) queries.get("subject");
         String country = (String) queries.get("country");
-        int minAge = (int) queries.get("minAge");
-        int maxAge = (int) queries.get("maxAge");
+        Integer minAge = (Integer) queries.get("minAge");
+        Integer maxAge = (Integer) queries.get("maxAge");
 
         return surveys.findAll().stream()
                 .filter(s ->
@@ -66,14 +70,12 @@ public class SurveyService {
                 .collect(Collectors.toList());
     }
 
-    private void sendSurveys(List<Object> surveys) {
-    }
-
-    private CronTrigger getFrequency(FREQUENCY frequency) {
+    private CronTrigger getFrequencyTrigger(Frequency frequency) {
         switch (frequency) {
             case DAILY: return DAILY;
             case WEEKLY: return WEEKLY;
-            default: return MONTHLY;
+            case MONTHLY: return MONTHLY;
+            default: throw new IllegalArgumentException("Unexpected frequency " + frequency);
         }
     }
 
