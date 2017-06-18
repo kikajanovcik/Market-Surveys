@@ -34,9 +34,9 @@ function buildSurveyRequestObject() {
         'requester': { id: 1},
         'subscription': {
             'frequency': frequency,
-            'channels': ["email", "api", "postal", "ftp"]
+            'channels': ["email", "api"]
         },
-        'queries': {
+        'survey': {
             'country': country,
             'subject': subject,
             'minAge': minAge,
