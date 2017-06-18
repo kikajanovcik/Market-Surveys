@@ -1,8 +1,8 @@
 package io.kikajanovcik.maketsurveys.entities;
 
 import javax.persistence.*;
-import java.util.HashMap;
 import java.util.Map;
+
 
 @Entity
 public class Requester {

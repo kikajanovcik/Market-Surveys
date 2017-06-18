@@ -2,9 +2,10 @@ package io.kikajanovcik.maketsurveys.classes;
 
 import java.util.List;
 
+
 public class Subscription {
 
-    public enum Frequency { DAILY, WEEKLY, MONTHLY };
+    public enum Frequency { DAILY, WEEKLY, MONTHLY }
     private Frequency frequency;
     private List<String> channels;
 

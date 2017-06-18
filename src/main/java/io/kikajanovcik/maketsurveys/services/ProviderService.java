@@ -5,12 +5,13 @@ import io.kikajanovcik.maketsurveys.repositories.ProviderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
 @Service
 public class ProviderService {
 
     @Autowired ProviderRepository providederRepository;
 
-    public Provider getProvider(Long id) {
+    public Provider getById(Long id) {
         return providederRepository.findOne(id);
     }
 }

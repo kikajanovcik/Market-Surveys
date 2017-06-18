@@ -2,6 +2,7 @@ package io.kikajanovcik.maketsurveys.entities;
 
 import javax.persistence.*;
 
+
 @Entity
 public class Survey {
 
@@ -15,13 +16,15 @@ public class Survey {
 
     private String subject;
     private String country;
-    private Integer[] targetAge = new Integer[2];
+    private Integer minAge;
+    private Integer maxAge;
 
-    public Survey(Provider provider, String subject, String country, Integer[] targetAge) {
+    public Survey(Provider provider, String subject, String country, Integer minAge, Integer maxAge) {
         this.provider = provider;
         this.subject = subject;
         this.country = country;
-        this.targetAge = targetAge;
+        this.minAge = minAge;
+        this.maxAge = maxAge;
     }
 
     public Survey() {}
@@ -42,7 +45,17 @@ public class Survey {
         return country;
     }
 
-    public Integer[] getTargetAge() {
-        return targetAge;
+    public Integer getMinAge() {
+        return minAge;
+    }
+
+    public Integer getMaxAge() {
+        return maxAge;
+    }
+
+    @Override
+    public String toString() {
+        return "subject: " + getSubject() + ", age: " +
+                getMinAge() + " - " + getMaxAge() + " " + ", country: " + getCountry();
     }
 }

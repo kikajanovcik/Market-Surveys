@@ -2,15 +2,15 @@ package io.kikajanovcik.maketsurveys.classes;
 
 import io.kikajanovcik.maketsurveys.entities.Provider;
 import io.kikajanovcik.maketsurveys.entities.Requester;
+import io.kikajanovcik.maketsurveys.entities.Survey;
 
-import java.util.Map;
 
 public class SurveyRequest {
 
     private Requester requester;
     private Provider provider;
+    private Survey survey;
     private Subscription subscription;
-    private Map<String, Object> queries;
 
     public Requester getRequester() {
         return requester;
@@ -32,11 +32,11 @@ public class SurveyRequest {
         return subscription;
     }
 
-    public Map<String, Object> getQueries() {
-        return queries;
+    public Survey getSurvey() {
+        return survey;
     }
 
     public boolean isValid() {
-        return getRequester() != null && getProvider() != null && getSubscription() != null && getQueries() != null;
+        return getRequester() != null && getProvider() != null && getSubscription() != null && getSurvey() != null;
     }
 }
