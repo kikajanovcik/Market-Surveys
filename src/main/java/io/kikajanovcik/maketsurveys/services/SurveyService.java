@@ -2,8 +2,8 @@ package io.kikajanovcik.maketsurveys.services;
 
 import io.kikajanovcik.maketsurveys.classes.SurveyRequest;
 import io.kikajanovcik.maketsurveys.classes.Subscription.Frequency;
-import io.kikajanovcik.maketsurveys.classes.SurveySubscription;
-import io.kikajanovcik.maketsurveys.entities.Requester;
+import io.kikajanovcik.maketsurveys.classes.SurveySubscriptionTask;
+import io.kikajanovcik.maketsurveys.entities.Provider;
 import io.kikajanovcik.maketsurveys.entities.Survey;
 import io.kikajanovcik.maketsurveys.repositories.RequesterRepository;
 import io.kikajanovcik.maketsurveys.repositories.SurveyRepository;
@@ -21,8 +21,7 @@ import java.util.stream.Collectors;
 @Service
 public class SurveyService {
 
-    @Autowired SurveyRepository surveys;
-    @Autowired RequesterRepository requesters;
+    @Autowired SurveyRepository surveyRepository;
 
     private final ThreadPoolTaskScheduler taskExecutor;
 
@@ -41,28 +40,28 @@ public class SurveyService {
 
     public void subscribe(SurveyRequest surveyRequest) {
 
-        Requester requester = requesters.findOne(surveyRequest.getRequester().getId());
-        surveyRequest.setRequester(requester);
-        logger.info("SurveyRequest received from " + requester.getName());
-        logger.info("Channels to receive subscription " + requester.getChannels());
+        logger.info("SurveyRequest received from " + surveyRequest.getRequester().getName());
 
-        surveyRequest.setSurveyService(this);
-        SurveySubscription surveySubscription = new SurveySubscription(surveyRequest);
+        SurveySubscriptionTask surveySubscription = new SurveySubscriptionTask(surveyRequest, this);
         Frequency frequency = surveyRequest.getSubscription().getFrequency();
+
+        // Execute task once at the act of subscribing, then periodically
+        taskExecutor.execute(surveySubscription);
         taskExecutor.schedule(surveySubscription, getFrequencyTrigger(frequency));
 
         logger.info("Scheduling successful to be done " + frequency);
     }
 
-    public List<Survey> getSurveys(Map<String, Object> queries) {
+    public List<Survey> getSurveys(Provider provider, Map<String, Object> queries) {
 
         String subject = (String) queries.get("subject");
         String country = (String) queries.get("country");
         Integer minAge = (Integer) queries.get("minAge");
         Integer maxAge = (Integer) queries.get("maxAge");
 
-        return surveys.findAll().stream()
+        return surveyRepository.findAll().stream()
                 .filter(s ->
+                        (s.getProvider().equals(provider)) &&
                         (isNotSelected(subject) || s.getSubject().equalsIgnoreCase(subject)) &&
                         (isNotSelected(country) || s.getCountry().equalsIgnoreCase(country)) &&
                         (isNotSelected(minAge) || s.getTargetAge()[0] >= minAge) &&

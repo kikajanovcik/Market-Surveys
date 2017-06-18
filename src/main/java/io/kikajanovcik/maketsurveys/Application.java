@@ -27,7 +27,9 @@ public class Application {
 
         return (args) -> {
 
-            reqesterRepository.save(new Requester("Caravelo", new HashMap<String, String>(){{ put("email","caravelo@caravelo.com"); put("api","caravelo.com/api/surveys");}}));
+            reqesterRepository.save(new Requester("Caravelo", new HashMap<String, String>(){{
+                put("email","caravelo@caravelo.com");
+                put("api","caravelo.com/api/surveys");}}));
 
             Provider p1 = providerRepository.save(new Provider("Provider1"));
             Provider p2 = providerRepository.save(new Provider("Provider2"));

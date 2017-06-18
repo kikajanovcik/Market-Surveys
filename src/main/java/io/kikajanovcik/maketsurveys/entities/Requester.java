@@ -11,17 +11,13 @@ public class Requester {
     @GeneratedValue(strategy = GenerationType.AUTO)
     Long id;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     private Map<String, String> channels;
     private String name;
 
     public Requester(String name, Map<String, String> channels) {
         this.name = name;
         this.channels = channels;
-    }
-
-    public Requester(Long id) {
-        this.id = id;
     }
 
     public Requester() {}

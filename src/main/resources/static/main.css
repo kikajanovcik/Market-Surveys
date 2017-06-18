@@ -1,0 +1,22 @@
+h1 {
+    font-size: 16px;
+    text-align: center;
+    margin: 30px;
+}
+
+h2 {
+    font-size: 15px;
+    text-align: center;
+}
+
+p {
+    margin: 30px;
+}
+
+#success-message {
+    display: none;
+}
+
+button {
+    margin: 30px;
+}

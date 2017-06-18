@@ -1,5 +1,8 @@
 package io.kikajanovcik.maketsurveys.entities;
 
+import com.sun.org.apache.xpath.internal.SourceTree;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -31,5 +34,15 @@ public class Provider {
 
     public String getName() {
         return name;
+    }
+
+    @Override
+    public int hashCode() {
+        return id.intValue();
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return obj.hashCode() == this.hashCode();
     }
 }

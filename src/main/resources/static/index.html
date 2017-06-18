@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Market Surveys</title>
+    <!-- bootstrap css -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="main.css">
+</head>
+
+<body class="container text-center">
+
+<h1>MARKET SURVEYS</h1>
+<p>Welcome Caravelo! Please choose what type of surveys you would like to receive in your channels</p>
+
+<div class="form-group row">
+    <div class="col-md-2">
+        <label for="subscription">Type Of Subscription</label>
+        <select id="subscription" class="form-control">
+            <option value="DAILY" selected>Daily</option>
+            <option value="WEEKLY">Weekly</option>
+            <option value="MONTHLY">Monthly</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <label for="provider">Select Provider</label>
+        <select id="provider" class="form-control">
+            <option value="1" selected>Provider1</option>
+            <option value="2">Provider2</option>
+            <option value="3">Provider3</option>
+            <option value="4">Provider4</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <label for="subject">Specify Subject</label>
+        <div class="row">
+            <input id="subject" class="form-control col-md-4" type="search" placeholder="Type subject...">
+        </div>
+    </div>
+    <div class="col-md-2">
+        <label for="country">Specify Country</label>
+        <select id="country" class="form-control">
+            <option selected></option>
+            <option value="ES">Spain</option>
+            <option value="UK">United Kingdom</option>
+            <option value="FR">France</option>
+        </select>
+    </div>
+    <div class="col-md-2">
+        <label for="minAge">Specify Minimum Age</label>
+        <input id="minAge" class="form-control" type="search">
+    </div>
+    <div class="col-md-2">
+        <label for="maxAge">Specify Maximum Age</label>
+        <input id="maxAge" class="form-control" type="search">
+    </div>
+</div>
+<button class="btn-primary" id="subscribe">Subscribe</button>
+<div id="success-message"> Check your Java terminal to see the expected input </div>
+
+<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script src="main.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+</body>
+</html>
