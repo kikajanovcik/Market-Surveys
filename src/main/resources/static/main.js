@@ -24,21 +24,25 @@ function buildSurveyRequestObject() {
 
     var providerId = $('#provider').val()
     var frequency =  $('#subscription').val();
+    var channels = [];
+    $('input:checked').each(function(){
+        channels.push($(this).val());
+    });
     var subject = $('#subject').val() === "" ? null : $('#subject').val();
+    var country = $('#country').val() === "" ? null : $('#country').val();
     var minAge = $('#minAge').val() === undefined ? null : parseInt($('#minAge').val());
     var maxAge = $('#maxAge').val() === undefined ? null : parseInt($('#maxAge').val());
-    var country = $('#country').val() === "" ? null : $('#country').val();
 
     return {
         'provider': { id: providerId},
         'requester': { id: 1},
         'subscription': {
             'frequency': frequency,
-            'channels': ["email", "api"]
+            'channels': channels
         },
         'survey': {
-            'country': country,
             'subject': subject,
+            'country': country,
             'minAge': minAge,
             'maxAge': maxAge
         }

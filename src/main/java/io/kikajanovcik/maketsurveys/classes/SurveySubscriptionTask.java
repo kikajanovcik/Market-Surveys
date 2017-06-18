@@ -40,7 +40,7 @@ public class SurveySubscriptionTask implements Runnable {
 
     private void logSurveys(List<Survey> surveys) {
         logger.info("Found " + surveys.size() + " surveys");
-        // Display found surveys to show they are correct
+        // Display found surveys data
         for (Survey survey : surveys) {
             logger.info(survey);
         }

@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/v1/surveys")
@@ -44,7 +46,8 @@ public class SurveyController {
 
         Requester requester = requesterService.getById(surveyRequest.getRequester().getId());
         Provider provider = providerService.getById(surveyRequest.getProvider().getId());
-        if (requester == null || provider == null) {
+        List<String> subscriptionChannels = surveyRequest.getSubscription().getChannels();
+        if (requester == null || provider == null || subscriptionChannels.isEmpty()) {
             return HttpStatus.NOT_FOUND;
         }
 
